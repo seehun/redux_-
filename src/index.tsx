@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,7 +19,7 @@ const loggerMiddleware = (store: any) => (next: any) => (action: any) => {
 };
 
 //middleware -> action후 reducer에 도달하기 전에 middleware 실행
-const middleware = applyMiddleware(loggerMiddleware);
+const middleware = applyMiddleware(thunk, loggerMiddleware);
 //store 생성 시 middleware 적용
 const store = createStore(rootReducer, middleware);
 
