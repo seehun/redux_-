@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
 
@@ -11,9 +11,17 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const store = createStore(rootReducer);
-store.dispatch({ type: 'ADD_TODO', text: 'Use_redux' });
-console.log('store.getState', store.getState());
+const loggerMiddleware = (store: any) => (next: any) => (action: any) => {
+  console.log('store', store);
+  console.log('action', action);
+  next(action);
+};
+
+//middleware -> action후 reducer에 도달하기 전에 middleware 실행
+const middleware = applyMiddleware(loggerMiddleware);
+//store 생성 시 middleware 적용
+const store = createStore(rootReducer, middleware);
+
 const render = () =>
   root.render(
     <React.StrictMode>
